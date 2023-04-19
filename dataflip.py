@@ -12,6 +12,8 @@ app = Flask(__name__)
 translator = Translator()
 jezici=googletrans.LANGUAGES
 #probaj
+HR={}
+
 
 def vrati_jezik(sadržaj):
     #print(jezici)
@@ -29,14 +31,16 @@ def prevedi(text_sentence):
     return str(prijevod.text)
 
 def prevedi_2(list_sentences):
-    HR=''
+    LOCAL_LIST=[]
     for sentence in list_sentences:
         prijevod=translator.translate(sentence, dest='hr')
         #print(sentence)
-        HR=HR+prijevod.text+'\n'
+        HR[prijevod.text]=str(sentence)
+        LOCAL_LIST.append(prijevod.text)
         #print(prijevod.text)
         #print('__________')
-    return HR
+        #print(LOCAL_LIST)
+    return LOCAL_LIST
 
 nltk.download('punkt')
 
@@ -84,14 +88,14 @@ def process(ticker):
     #nltk_sentences = nltk.sent_tokenize(text_link)
     nltk_sentences = nltk.sent_tokenize(text_link)
     
-    nltk_sentences_hr = nltk.sent_tokenize(prevedi_2(nltk_sentences))
+    nltk_sentences_hr = prevedi_2(nltk_sentences)
     #print(len(nltk_sentences))
     #print(len(nltk_sentences_hr))
 
     language_used=vrati_jezik(text_link)
     
     #print('_______________________________________________')
-    nltk_riječi = nltk.word_tokenize(text_link)
+    #nltk_riječi = nltk.word_tokenize(text_link)
     nr_words_checked=0
 
     BIJES=0
@@ -125,7 +129,7 @@ def process(ticker):
     DIVLJENJE=0
     POVJERENJE=0
     PRIHVAĆANJE=0
-    step_on=len(nltk_riječi)/200
+    #step_on=len(nltk_riječi)/200
     #print(len(nltk_riječi))
     #print(str(int(step_on)))
     rrr=''
@@ -133,10 +137,15 @@ def process(ticker):
     count=0
     #input('h')
     TEXT.append('{"language":"'+'%s' % language_used+'"}')
-    for loop_over_sentence in nltk_sentences:
+
+    for loop_over_sentence in nltk_sentences_hr:
         #print('████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████')
+        #print('*************************************************')
         #print(loop_over_sentence)
-        nltk_words = nltk.word_tokenize(prevedi(str(loop_over_sentence)))
+        #print('_________________________________________________')
+        #print(HR[loop_over_sentence])
+        #print('*************************************************')
+        nltk_words = nltk.word_tokenize(loop_over_sentence)
         words=[word.lower() for word in nltk_words if word.isalpha()]
         rečenica=words
         prijateljstvo=0
@@ -1281,115 +1290,115 @@ def process(ticker):
                 if korak==0:
                     NEGACIJA_AKTIVNA=False
                 
-        finale = '{"rečenica":"'+loop_over_sentence.replace('"','')+'", '
+        #finale = '{"rečenica":"'+HR[loop_over_sentence].replace('"','')+'", '
 
-        if bijes!=0: finale=finale+'"bijes":'+str(bijes)+', '
-        if ljutnja!=0: finale=finale+'"ljutnja":'+str(ljutnja)+', ' 
-        if odvažnost!=0: finale=finale+'"odvažnost":'+str(odvažnost)+', '
+        #if bijes!=0: finale=finale+'"bijes":'+str(bijes)+', '
+        #if ljutnja!=0: finale=finale+'"ljutnja":'+str(ljutnja)+', ' 
+        #if odvažnost!=0: finale=finale+'"odvažnost":'+str(odvažnost)+', '
 
-        if budnost!=0: finale=finale+'"budnost":'+str(budnost)+', '
-        if očekivanje!=0: finale=finale+'"očekivanje":'+str(očekivanje)+', '
-        if interes!=0: finale=finale+'"interes":'+str(interes)+', '
+        #if budnost!=0: finale=finale+'"budnost":'+str(budnost)+', '
+        #if očekivanje!=0: finale=finale+'"očekivanje":'+str(očekivanje)+', '
+        #if interes!=0: finale=finale+'"interes":'+str(interes)+', '
 
-        if gnušanje!=0: finale=finale+'"gnušanje":'+str(gnušanje)+', '
-        if gađenje!=0: finale=finale+'"gađenje":'+str(gađenje)+', '
-        if averzija!=0: finale=finale+'"averzija":'+str(averzija)+', '
+        #if gnušanje!=0: finale=finale+'"gnušanje":'+str(gnušanje)+', '
+        #if gađenje!=0: finale=finale+'"gađenje":'+str(gađenje)+', '
+        #if averzija!=0: finale=finale+'"averzija":'+str(averzija)+', '
 
-        if teror!=0: finale=finale+'"teror":'+str(teror)+', '
-        if strah!=0: finale=finale+'"strah":'+str(strah)+', '
-        if bojazan!=0: finale=finale+'"bojazan":'+str(bojazan)+', '
+        #if teror!=0: finale=finale+'"teror":'+str(teror)+', '
+        #if strah!=0: finale=finale+'"strah":'+str(strah)+', '
+        #if bojazan!=0: finale=finale+'"bojazan":'+str(bojazan)+', '
 
-        if ekstaza!=0: finale=finale+'"ekstaza":'+str(ekstaza)+', '
-        if sreća!=0: finale=finale+'"sreća":'+str(sreća)+', '
-        if spokoj!=0: finale=finale+'"spokoj":'+str(spokoj)+', '
+        #if ekstaza!=0: finale=finale+'"ekstaza":'+str(ekstaza)+', '
+        #if sreća!=0: finale=finale+'"sreća":'+str(sreća)+', '
+        #if spokoj!=0: finale=finale+'"spokoj":'+str(spokoj)+', '
 
-        if patnja!=0: finale=finale+'"patnja":'+str(patnja)+', '
-        if tuga!=0: finale=finale+'"tuga":'+str(tuga)+', '
-        if sjeta!=0: finale=finale+'"sjeta":'+str(sjeta)+', '
+        #if patnja!=0: finale=finale+'"patnja":'+str(patnja)+', '
+        #if tuga!=0: finale=finale+'"tuga":'+str(tuga)+', '
+        #if sjeta!=0: finale=finale+'"sjeta":'+str(sjeta)+', '
 
-        if zapanjenost!=0: finale=finale+'"zapanjenost":'+str(zapanjenost)+', '
-        if iznenađenje!=0: finale=finale+'"iznenađenje":'+str(iznenađenje)+', '
-        if distrakcija!=0: finale=finale+'"distrakcija":'+str(distrakcija)+', '
+        #if zapanjenost!=0: finale=finale+'"zapanjenost":'+str(zapanjenost)+', '
+        #if iznenađenje!=0: finale=finale+'"iznenađenje":'+str(iznenađenje)+', '
+        #if distrakcija!=0: finale=finale+'"distrakcija":'+str(distrakcija)+', '
 
-        if divljenje!=0: finale=finale+'"divljenje":'+str(divljenje)+', '
-        if povjerenje!=0: finale=finale+'"povjerenje":'+str(povjerenje)+', '
-        if prihvaćanje!=0: finale=finale+'"prihvaćanje":'+str(prihvaćanje)+', '
+        #if divljenje!=0: finale=finale+'"divljenje":'+str(divljenje)+', '
+        #if povjerenje!=0: finale=finale+'"povjerenje":'+str(povjerenje)+', '
+        #if prihvaćanje!=0: finale=finale+'"prihvaćanje":'+str(prihvaćanje)+', '
         
         #_________________________________SEKUNDARNE________________
-        if očaj_int_1!=0: finale=finale+'"očaj_int_1":'+str(očaj_int_1)+', '
-        if očaj_int_2!=0: finale=finale+'"očaj_int_2":'+str(očaj_int_2)+', '
-        if očaj_int_3!=0: finale=finale+'"očaj_int_3":'+str(očaj_int_3)+', '
-        if neodobravanje_int_1!=0: finale=finale+'"neodobravanje_int_1":'+str(neodobravanje_int_1)+', '
-        if neodobravanje_int_2!=0: finale=finale+'"neodobravanje_int_2":'+str(neodobravanje_int_2)+', '
-        if razočaranje!=0: finale=finale+'"razočaranje":'+str(razočaranje)+', '
-        if nevjerica_int_1!=0: finale=finale+'"nevjerica_int_1":'+str(nevjerica_int_1)+', '
-        if nevjerica_int_2!=0: finale=finale+'"nevjerica_int_2":'+str(nevjerica_int_2)+', '
-        if šok!=0: finale=finale+'"šok":'+str(šok)+', '
-        if žaljenje_int_1!=0: finale=finale+'"žaljenje_int_1":'+str(žaljenje_int_1)+', '
-        if žaljenje_int_2!=0: finale=finale+'"žaljenje_int_2":'+str(žaljenje_int_2)+', '
-        if nesretan!=0: finale=finale+'"nesretan":'+str(nesretan)+', '
-        if strahopoštovanje_int_1!=0: finale=finale+'"strahopoštovanje_int_1":'+str(strahopoštovanje_int_1)+', '
-        if strahopoštovanje_int_2!=0: finale=finale+'"strahopoštovanje_int_2":'+str(strahopoštovanje_int_2)+', '
-        if strahopoštovanje_int_3!=0: finale=finale+'"strahopoštovanje_int_3":'+str(strahopoštovanje_int_3)+', '
-        if podređenost_int_1!=0: finale=finale+'"podređenost_int_1":'+str(podređenost_int_1)+', '
-        if podređenost_int_2!=0: finale=finale+'"podređenost_int_2":'+str(podređenost_int_2)+', '
-        if podređenost_int_3!=0: finale=finale+'"podređenost_int_3":'+str(podređenost_int_3)+', '
-        if zadovoljstvo_int_1!=0: finale=finale+'"zadovoljstvo_int_1":'+str(zadovoljstvo_int_1)+', '
-        if zadovoljstvo_int_2!=0: finale=finale+'"zadovoljstvo_int_2":'+str(zadovoljstvo_int_2)+', '
-        if zadovoljstvo_int_3!=0: finale=finale+'"zadovoljstvo_int_3":'+str(zadovoljstvo_int_3)+', '
-        if znatiželja_int_1!=0: finale=finale+'"znatiželja_int_1":'+str(znatiželja_int_1)+', '
-        if znatiželja_int_2!=0: finale=finale+'"znatiželja_int_2":'+str(znatiželja_int_2)+', '
-        if znatiželja_int_3!=0: finale=finale+'"znatiželja_int_3":'+str(znatiželja_int_3)+', '
-        if sentimentalnost_int_1!=0: finale=finale+'"sentimentalnost_int_1":'+str(sentimentalnost_int_1)+', '
-        if sentimentalnost_int_2!=0: finale=finale+'"sentimentalnost_int_2":'+str(sentimentalnost_int_2)+', '
-        if sentimentalnost_int_3!=0: finale=finale+'"sentimentalnost_int_3":'+str(sentimentalnost_int_3)+', '
-        if ponos_int_1!=0: finale=finale+'"ponos_int_1":'+str(ponos_int_1)+', '
-        if ponos_int_2!=0: finale=finale+'"ponos_int_2":'+str(ponos_int_2)+', '
-        if pobjeda!=0: finale=finale+'"pobjeda":'+str(pobjeda)+', '
-        if optimizam_int_1!=0: finale=finale+'"optimizam_int_1":'+str(optimizam_int_1)+', '
-        if optimizam_int_2!=0: finale=finale+'"optimizam_int_2":'+str(optimizam_int_2)+', '
-        if hrabrost!=0: finale=finale+'"hrabrost":'+str(hrabrost)+', '
-        if nada_int_1!=0: finale=finale+'"nada_int_1":'+str(nada_int_1)+', '
-        if nada_int_2!=0: finale=finale+'"nada_int_2":'+str(nada_int_2)+', '
-        if nada_int_3!=0: finale=finale+'"nada_int_3":'+str(nada_int_3)+', '
-        if krivnja_int_1!=0: finale=finale+'"krivnja_int_1":'+str(krivnja_int_1)+', '
-        if krivnja_int_2!=0: finale=finale+'"krivnja_int_2":'+str(krivnja_int_2)+', '
-        if uzbuđenje!=0: finale=finale+'"uzbuđenje":'+str(uzbuđenje)+', '
-        if sram_int_1!=0: finale=finale+'"sram_int_1":'+str(sram_int_1)+', '
-        if sram_int_2!=0: finale=finale+'"sram_int_2":'+str(sram_int_2)+', '
-        if bezobraština!=0: finale=finale+'"bezobraština":'+str(bezobraština)+', '
-        if prezir_int_1!=0: finale=finale+'"prezir_int_1":'+str(prezir_int_1)+', '
-        if prezir_int_2!=0: finale=finale+'"prezir_int_2":'+str(prezir_int_2)+', '
-        if bez_poštovanja!=0: finale=finale+'"bez_poštovanjabijes":'+str(bez_poštovanja)+', '
-        if zavist_int_1!=0: finale=finale+'"zavist_int_1":'+str(zavist_int_1)+', '
-        if zavist_int_2!=0: finale=finale+'"zavist_int_2":'+str(zavist_int_2)+', '
-        if neugoda!=0: finale=finale+'"neugoda":'+str(neugoda)+', '
-        if dominacija_int_1!=0: finale=finale+'"dominacija_int_1":'+str(dominacija_int_1)+', '
-        if dominacija_int_2!=0: finale=finale+'"dominacija_int_2":'+str(dominacija_int_2)+', '
-        if dominacija_int_3!=0: finale=finale+'"dominacija_int_3":'+str(dominacija_int_3)+', '
-        if agresija_int_1!=0: finale=finale+'"agresija_int_1":'+str(agresija_int_1)+', '
-        if agresija_int_2!=0: finale=finale+'"agresija_int_2":'+str(agresija_int_2)+', '
-        if agresija_int_3!=0: finale=finale+'"agresija_int_3":'+str(agresija_int_3)+', '
-        if uvreda_int_1!=0: finale=finale+'"uvreda_int_1":'+str(uvreda_int_1)+', '
-        if uvreda_int_2!=0: finale=finale+'"uvreda_int_2":'+str(uvreda_int_2)+', '
-        if mržnja!=0: finale=finale+'"mržnja":'+str(mržnja)+', '
-        if pesimizam_int_1!=0: finale=finale+'"pesimizam_int_1":'+str(pesimizam_int_1)+', '
-        if pesimizam_int_2!=0: finale=finale+'"pesimizam_int_2":'+str(pesimizam_int_2)+', '
-        if nepovjerenje!=0: finale=finale+'"nepovjerenje":'+str(nepovjerenje)+', '
-        if anksioznost_int_1!=0: finale=finale+'"anksioznost_int_1":'+str(anksioznost_int_1)+', '
-        if anksioznost_int_2!=0: finale=finale+'"anksioznost_int_2":'+str(anksioznost_int_2)+', '
-        if zabrinutost!=0: finale=finale+'"zabrinutost":'+str(zabrinutost)+', '
-        if morbidnost_int_1!=0: finale=finale+'"morbidnost_int_1":'+str(morbidnost_int_1)+', '
-        if morbidnost_int_2!=0: finale=finale+'"morbidnost_int_2":'+str(morbidnost_int_2)+', '
-        if ismijavanje!=0: finale=finale+'"ismijavanje":'+str(ismijavanje)+', '
-        if cinizam_int_1!=0: finale=finale+'"cinizam_int_1":'+str(cinizam_int_1)+', '
-        if cinizam_int_2!=0: finale=finale+'"cinizam_int_2":'+str(cinizam_int_2)+', '
-        if cinizam_int_3!=0: finale=finale+'"cinizam_int_3":'+str(cinizam_int_3)+', '
-        if prijateljstvo!=0: finale=finale+'"prijateljstvo":'+str(prijateljstvo)+', '
-        if ljubav!=0: finale=finale+'"ljubav":'+str(ljubav)+', '
-        if obožavanje!=0: finale=finale+'"obožavanje":'+str(obožavanje)+', '
+        #if očaj_int_1!=0: finale=finale+'"očaj_int_1":'+str(očaj_int_1)+', '
+        #if očaj_int_2!=0: finale=finale+'"očaj_int_2":'+str(očaj_int_2)+', '
+        #if očaj_int_3!=0: finale=finale+'"očaj_int_3":'+str(očaj_int_3)+', '
+        #if neodobravanje_int_1!=0: finale=finale+'"neodobravanje_int_1":'+str(neodobravanje_int_1)+', '
+        #if neodobravanje_int_2!=0: finale=finale+'"neodobravanje_int_2":'+str(neodobravanje_int_2)+', '
+        #if razočaranje!=0: finale=finale+'"razočaranje":'+str(razočaranje)+', '
+        #if nevjerica_int_1!=0: finale=finale+'"nevjerica_int_1":'+str(nevjerica_int_1)+', '
+        #if nevjerica_int_2!=0: finale=finale+'"nevjerica_int_2":'+str(nevjerica_int_2)+', '
+        #if šok!=0: finale=finale+'"šok":'+str(šok)+', '
+        #if žaljenje_int_1!=0: finale=finale+'"žaljenje_int_1":'+str(žaljenje_int_1)+', '
+        #if žaljenje_int_2!=0: finale=finale+'"žaljenje_int_2":'+str(žaljenje_int_2)+', '
+        #if nesretan!=0: finale=finale+'"nesretan":'+str(nesretan)+', '
+        #if strahopoštovanje_int_1!=0: finale=finale+'"strahopoštovanje_int_1":'+str(strahopoštovanje_int_1)+', '
+        #if strahopoštovanje_int_2!=0: finale=finale+'"strahopoštovanje_int_2":'+str(strahopoštovanje_int_2)+', '
+        #if strahopoštovanje_int_3!=0: finale=finale+'"strahopoštovanje_int_3":'+str(strahopoštovanje_int_3)+', '
+        #if podređenost_int_1!=0: finale=finale+'"podređenost_int_1":'+str(podređenost_int_1)+', '
+        #if podređenost_int_2!=0: finale=finale+'"podređenost_int_2":'+str(podređenost_int_2)+', '
+        #if podređenost_int_3!=0: finale=finale+'"podređenost_int_3":'+str(podređenost_int_3)+', '
+        #if zadovoljstvo_int_1!=0: finale=finale+'"zadovoljstvo_int_1":'+str(zadovoljstvo_int_1)+', '
+        #if zadovoljstvo_int_2!=0: finale=finale+'"zadovoljstvo_int_2":'+str(zadovoljstvo_int_2)+', '
+        #if zadovoljstvo_int_3!=0: finale=finale+'"zadovoljstvo_int_3":'+str(zadovoljstvo_int_3)+', '
+        #if znatiželja_int_1!=0: finale=finale+'"znatiželja_int_1":'+str(znatiželja_int_1)+', '
+        #if znatiželja_int_2!=0: finale=finale+'"znatiželja_int_2":'+str(znatiželja_int_2)+', '
+        #if znatiželja_int_3!=0: finale=finale+'"znatiželja_int_3":'+str(znatiželja_int_3)+', '
+        #if sentimentalnost_int_1!=0: finale=finale+'"sentimentalnost_int_1":'+str(sentimentalnost_int_1)+', '
+        #if sentimentalnost_int_2!=0: finale=finale+'"sentimentalnost_int_2":'+str(sentimentalnost_int_2)+', '
+        #if sentimentalnost_int_3!=0: finale=finale+'"sentimentalnost_int_3":'+str(sentimentalnost_int_3)+', '
+        #if ponos_int_1!=0: finale=finale+'"ponos_int_1":'+str(ponos_int_1)+', '
+        #if ponos_int_2!=0: finale=finale+'"ponos_int_2":'+str(ponos_int_2)+', '
+        #if pobjeda!=0: finale=finale+'"pobjeda":'+str(pobjeda)+', '
+        #if optimizam_int_1!=0: finale=finale+'"optimizam_int_1":'+str(optimizam_int_1)+', '
+        #if optimizam_int_2!=0: finale=finale+'"optimizam_int_2":'+str(optimizam_int_2)+', '
+        #if hrabrost!=0: finale=finale+'"hrabrost":'+str(hrabrost)+', '
+        #if nada_int_1!=0: finale=finale+'"nada_int_1":'+str(nada_int_1)+', '
+        #if nada_int_2!=0: finale=finale+'"nada_int_2":'+str(nada_int_2)+', '
+        #if nada_int_3!=0: finale=finale+'"nada_int_3":'+str(nada_int_3)+', '
+        #if krivnja_int_1!=0: finale=finale+'"krivnja_int_1":'+str(krivnja_int_1)+', '
+        #if krivnja_int_2!=0: finale=finale+'"krivnja_int_2":'+str(krivnja_int_2)+', '
+        #if uzbuđenje!=0: finale=finale+'"uzbuđenje":'+str(uzbuđenje)+', '
+        #if sram_int_1!=0: finale=finale+'"sram_int_1":'+str(sram_int_1)+', '
+        #if sram_int_2!=0: finale=finale+'"sram_int_2":'+str(sram_int_2)+', '
+        #if bezobraština!=0: finale=finale+'"bezobraština":'+str(bezobraština)+', '
+        #if prezir_int_1!=0: finale=finale+'"prezir_int_1":'+str(prezir_int_1)+', '
+        #if prezir_int_2!=0: finale=finale+'"prezir_int_2":'+str(prezir_int_2)+', '
+        #if bez_poštovanja!=0: finale=finale+'"bez_poštovanjabijes":'+str(bez_poštovanja)+', '
+        #if zavist_int_1!=0: finale=finale+'"zavist_int_1":'+str(zavist_int_1)+', '
+        #if zavist_int_2!=0: finale=finale+'"zavist_int_2":'+str(zavist_int_2)+', '
+        #if neugoda!=0: finale=finale+'"neugoda":'+str(neugoda)+', '
+        #if dominacija_int_1!=0: finale=finale+'"dominacija_int_1":'+str(dominacija_int_1)+', '
+        #if dominacija_int_2!=0: finale=finale+'"dominacija_int_2":'+str(dominacija_int_2)+', '
+        #if dominacija_int_3!=0: finale=finale+'"dominacija_int_3":'+str(dominacija_int_3)+', '
+        #if agresija_int_1!=0: finale=finale+'"agresija_int_1":'+str(agresija_int_1)+', '
+        #if agresija_int_2!=0: finale=finale+'"agresija_int_2":'+str(agresija_int_2)+', '
+        #if agresija_int_3!=0: finale=finale+'"agresija_int_3":'+str(agresija_int_3)+', '
+        #if uvreda_int_1!=0: finale=finale+'"uvreda_int_1":'+str(uvreda_int_1)+', '
+        #if uvreda_int_2!=0: finale=finale+'"uvreda_int_2":'+str(uvreda_int_2)+', '
+        #if mržnja!=0: finale=finale+'"mržnja":'+str(mržnja)+', '
+        #if pesimizam_int_1!=0: finale=finale+'"pesimizam_int_1":'+str(pesimizam_int_1)+', '
+        #if pesimizam_int_2!=0: finale=finale+'"pesimizam_int_2":'+str(pesimizam_int_2)+', '
+        #if nepovjerenje!=0: finale=finale+'"nepovjerenje":'+str(nepovjerenje)+', '
+        #if anksioznost_int_1!=0: finale=finale+'"anksioznost_int_1":'+str(anksioznost_int_1)+', '
+        #if anksioznost_int_2!=0: finale=finale+'"anksioznost_int_2":'+str(anksioznost_int_2)+', '
+        #if zabrinutost!=0: finale=finale+'"zabrinutost":'+str(zabrinutost)+', '
+        #if morbidnost_int_1!=0: finale=finale+'"morbidnost_int_1":'+str(morbidnost_int_1)+', '
+        #if morbidnost_int_2!=0: finale=finale+'"morbidnost_int_2":'+str(morbidnost_int_2)+', '
+        #if ismijavanje!=0: finale=finale+'"ismijavanje":'+str(ismijavanje)+', '
+        #if cinizam_int_1!=0: finale=finale+'"cinizam_int_1":'+str(cinizam_int_1)+', '
+        #if cinizam_int_2!=0: finale=finale+'"cinizam_int_2":'+str(cinizam_int_2)+', '
+        #if cinizam_int_3!=0: finale=finale+'"cinizam_int_3":'+str(cinizam_int_3)+', '
+        #if prijateljstvo!=0: finale=finale+'"prijateljstvo":'+str(prijateljstvo)+', '
+        #if ljubav!=0: finale=finale+'"ljubav":'+str(ljubav)+', '
+        #if obožavanje!=0: finale=finale+'"obožavanje":'+str(obožavanje)+', '
 
-        CLEAN_LINE='{"rečenica":"'+loop_over_sentence.replace('"','')+'", '
+        CLEAN_LINE='{"rečenica":"'+HR[loop_over_sentence].replace('"','')+'", '
 
     #SURPRISE		ANTICIPATION
         if budnost>zapanjenost:
@@ -1688,8 +1697,8 @@ def process(ticker):
         CLEAN_LINE=CLEAN_LINE+'}'
 
         #
-        finale=finale[:-2]
-        finale=finale+'}'
+#        finale=finale[:-2]
+#        finale=finale+'}'
         #zzz=clean(finale)
         #print('******************************')
         #print(finale)
@@ -1699,47 +1708,47 @@ def process(ticker):
         #TEXT.append(finale)
 
 
-    print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
-    print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
-    print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
-    print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
+    #print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
+    #print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
+    #print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
+    #print('¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨')
     #____________________KUMULATIVNE
-    finale_kumulativne = '{'
+    #finale_kumulativne = '{'
 
-    if BIJES!=0: finale_kumulativne=finale_kumulativne+'"BIJES":'+str(BIJES)+', '
-    if LJUTNJA!=0: finale_kumulativne=finale_kumulativne+'"LJUTNJA":'+str(LJUTNJA)+', ' 
-    if ODVAŽNOST!=0: finale_kumulativne=finale_kumulativne+'"ODVAŽNOST":'+str(ODVAŽNOST)+', '
+    #if BIJES!=0: finale_kumulativne=finale_kumulativne+'"BIJES":'+str(BIJES)+', '
+    #if LJUTNJA!=0: finale_kumulativne=finale_kumulativne+'"LJUTNJA":'+str(LJUTNJA)+', ' 
+    #if ODVAŽNOST!=0: finale_kumulativne=finale_kumulativne+'"ODVAŽNOST":'+str(ODVAŽNOST)+', '
 
-    if BUDNOST!=0: finale_kumulativne=finale_kumulativne+'"BUDNOST":'+str(BUDNOST)+', '
-    if OČEKIVANJE!=0: finale_kumulativne=finale_kumulativne+'"OČEKIVANJE":'+str(OČEKIVANJE)+', '
-    if INTERES!=0: finale_kumulativne=finale_kumulativne+'"INTERES":'+str(INTERES)+', '
+    #if BUDNOST!=0: finale_kumulativne=finale_kumulativne+'"BUDNOST":'+str(BUDNOST)+', '
+    #if OČEKIVANJE!=0: finale_kumulativne=finale_kumulativne+'"OČEKIVANJE":'+str(OČEKIVANJE)+', '
+    #if INTERES!=0: finale_kumulativne=finale_kumulativne+'"INTERES":'+str(INTERES)+', '
 
-    if GNUŠANJE!=0: finale_kumulativne=finale_kumulativne+'"GNUŠANJE":'+str(GNUŠANJE)+', '
-    if GAĐENJE!=0: finale_kumulativne=finale_kumulativne+'"GAĐENJE":'+str(GAĐENJE)+', '
-    if AVERZIJA!=0: finale_kumulativne=finale_kumulativne+'"AVERZIJA":'+str(AVERZIJA)+', '
+    #if GNUŠANJE!=0: finale_kumulativne=finale_kumulativne+'"GNUŠANJE":'+str(GNUŠANJE)+', '
+    #if GAĐENJE!=0: finale_kumulativne=finale_kumulativne+'"GAĐENJE":'+str(GAĐENJE)+', '
+    #if AVERZIJA!=0: finale_kumulativne=finale_kumulativne+'"AVERZIJA":'+str(AVERZIJA)+', '
 
-    if TEROR!=0: finale_kumulativne=finale_kumulativne+'"TEROR":'+str(TEROR)+', '
-    if STRAH!=0: finale_kumulativne=finale_kumulativne+'"STRAH":'+str(STRAH)+', '
-    if BOJAZAN!=0: finale_kumulativne=finale_kumulativne+'"BOJAZAN":'+str(BOJAZAN)+', '
+    #if TEROR!=0: finale_kumulativne=finale_kumulativne+'"TEROR":'+str(TEROR)+', '
+    #if STRAH!=0: finale_kumulativne=finale_kumulativne+'"STRAH":'+str(STRAH)+', '
+    #if BOJAZAN!=0: finale_kumulativne=finale_kumulativne+'"BOJAZAN":'+str(BOJAZAN)+', '
 
-    if EKSTAZA!=0: finale_kumulativne=finale_kumulativne+'"EKSTAZA":'+str(EKSTAZA)+', '
-    if SREĆA!=0: finale_kumulativne=finale_kumulativne+'"SREĆA":'+str(SREĆA)+', '
-    if SPOKOJ!=0: finale_kumulativne=finale_kumulativne+'"SPOKOJ":'+str(SPOKOJ)+', '
+    #if EKSTAZA!=0: finale_kumulativne=finale_kumulativne+'"EKSTAZA":'+str(EKSTAZA)+', '
+    #if SREĆA!=0: finale_kumulativne=finale_kumulativne+'"SREĆA":'+str(SREĆA)+', '
+    #if SPOKOJ!=0: finale_kumulativne=finale_kumulativne+'"SPOKOJ":'+str(SPOKOJ)+', '
 
-    if PATNJA!=0: finale_kumulativne=finale_kumulativne+'"PATNJA":'+str(PATNJA)+', '
-    if TUGA!=0: finale_kumulativne=finale_kumulativne+'"TUGA":'+str(TUGA)+', '
-    if SJETA!=0: finale_kumulativne=finale_kumulativne+'"SJETA":'+str(SJETA)+', '
+    #if PATNJA!=0: finale_kumulativne=finale_kumulativne+'"PATNJA":'+str(PATNJA)+', '
+    #if TUGA!=0: finale_kumulativne=finale_kumulativne+'"TUGA":'+str(TUGA)+', '
+    #if SJETA!=0: finale_kumulativne=finale_kumulativne+'"SJETA":'+str(SJETA)+', '
 
-    if ZAPANJENOST!=0: finale_kumulativne=finale_kumulativne+'"ZAPANJENOST":'+str(ZAPANJENOST)+', '
-    if IZNENAĐENJE!=0: finale_kumulativne=finale_kumulativne+'"IZNENAĐENJE":'+str(IZNENAĐENJE)+', '
-    if DISTRAKCIJA!=0: finale_kumulativne=finale_kumulativne+'"DISTRAKCIJA":'+str(DISTRAKCIJA)+', '
+    #if ZAPANJENOST!=0: finale_kumulativne=finale_kumulativne+'"ZAPANJENOST":'+str(ZAPANJENOST)+', '
+    #if IZNENAĐENJE!=0: finale_kumulativne=finale_kumulativne+'"IZNENAĐENJE":'+str(IZNENAĐENJE)+', '
+    #if DISTRAKCIJA!=0: finale_kumulativne=finale_kumulativne+'"DISTRAKCIJA":'+str(DISTRAKCIJA)+', '
 
-    if DIVLJENJE!=0: finale_kumulativne=finale_kumulativne+'"DIVLJENJE":'+str(DIVLJENJE)+', '
-    if POVJERENJE!=0: finale_kumulativne=finale_kumulativne+'"POVJERENJE":'+str(POVJERENJE)+', '
-    if PRIHVAĆANJE!=0: finale_kumulativne=finale_kumulativne+'"PRIHVAĆANJE":'+str(PRIHVAĆANJE)+', '
+    #if DIVLJENJE!=0: finale_kumulativne=finale_kumulativne+'"DIVLJENJE":'+str(DIVLJENJE)+', '
+    #if POVJERENJE!=0: finale_kumulativne=finale_kumulativne+'"POVJERENJE":'+str(POVJERENJE)+', '
+    #if PRIHVAĆANJE!=0: finale_kumulativne=finale_kumulativne+'"PRIHVAĆANJE":'+str(PRIHVAĆANJE)+', '
 
-    finale_kumulativne=finale_kumulativne[:-2]
-    finale_kumulativne=finale_kumulativne+'}'
+    #finale_kumulativne=finale_kumulativne[:-2]
+    #finale_kumulativne=finale_kumulativne+'}'
 
     CLEAN_LINE_kumulativne='{"url":"'+url+'", '
 
