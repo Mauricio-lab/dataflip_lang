@@ -1398,7 +1398,7 @@ def process(ticker):
         #if ljubav!=0: finale=finale+'"ljubav":'+str(ljubav)+', '
         #if obožavanje!=0: finale=finale+'"obožavanje":'+str(obožavanje)+', '
 
-        CLEAN_LINE='{"rečenica":"'+HR[loop_over_sentence].replace('"','')+'", '
+        CLEAN_LINE='{"rečenica":"'+HR[loop_over_sentence].replace('"','').replace("'",'*')+'", '
 
     #SURPRISE		ANTICIPATION
         if budnost>zapanjenost:
