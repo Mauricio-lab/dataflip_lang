@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 translator = Translator()
 jezici=googletrans.LANGUAGES
+#probaj
 
 def vrati_jezik(sadržaj):
     #print(jezici)
@@ -273,7 +274,7 @@ def process(ticker):
         """
         korak=0
         NEGACIJA_AKTIVNA=False
-        #print(rečenica.index('kuću'))
+        #print(rečenia.index('kuću'))
         #print('<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<')
         #print(rečenica)
         for i in rečenica:
